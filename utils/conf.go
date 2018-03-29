@@ -8,6 +8,9 @@ import (
 type Step struct {
 	Mode string `yaml:"mode"`
 	Command string `yaml:"command"`
+	Contains string `yaml:"contains"`
+	Retries int `yaml:"retries"`
+	Delay int `yaml:"delay"`
 }
 
 type Conf struct {

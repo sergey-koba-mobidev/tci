@@ -11,6 +11,7 @@ var stepRegistry = make(map[string]reflect.Type)
 
 func initRegistry() {
 	stepRegistry["cmd"] = reflect.TypeOf(CmdStep{})
+	stepRegistry["until"] = reflect.TypeOf(UntilStep{})
 }
 
 func RunSteps(conf *utils.Conf) error {

@@ -6,7 +6,7 @@ import (
 
 func LogInfo(msg string, a ...interface{}) {
 	if len(a) > 0 {
-		color.Yellow(msg, a)
+		color.Yellow(msg, a...)
 	} else {
 		color.Yellow(msg)
 	}
@@ -14,7 +14,7 @@ func LogInfo(msg string, a ...interface{}) {
 
 func LogError(msg string, a ...interface{}) {
 	if len(a) > 0 {
-		color.Red(msg, a)
+		color.Red(msg, a...)
 	} else {
 		color.Red(msg)
 	}
@@ -22,7 +22,7 @@ func LogError(msg string, a ...interface{}) {
 
 func LogSuccess(msg string, a ...interface{}) {
 	if len(a) > 0 {
-		color.Green(msg, a)
+		color.Green(msg, a...)
 	} else {
 		color.Green(msg)
 	}

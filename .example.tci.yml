@@ -1,4 +1,11 @@
 steps:
   - command: ls
+
   - mode: cmd
     command: ls -a
+
+  - mode: until
+    command: date +%s
+    contains: 99
+    retries: 5
+    delay: 1000
