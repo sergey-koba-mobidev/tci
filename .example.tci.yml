@@ -1,3 +1,4 @@
 steps:
-  - mode: command
-    command: ls
+  - command: ls
+  - mode: cmd
+    command: ls -a

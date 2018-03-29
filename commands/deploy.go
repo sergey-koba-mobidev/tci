@@ -1,8 +1,9 @@
 package commands
 
 import (
-	"github.com/sergey-koba-mobidev/tci/utils"
 	"os"
+	"github.com/sergey-koba-mobidev/tci/utils"
+	"github.com/sergey-koba-mobidev/tci/steps"
 )
 
 func Deploy(filename string) error {
@@ -19,7 +20,7 @@ func Deploy(filename string) error {
 	}
 
 	utils.LogInfo("Found %d step(s).", len(conf.Steps))
-	err = RunSteps(conf)
+	err = steps.RunSteps(conf)
 	if err != nil {
 		return err
 	}
