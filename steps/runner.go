@@ -5,24 +5,49 @@ import (
 	"fmt"
 	"reflect"
 	"errors"
+	"strings"
 )
 
 var stepRegistry = make(map[string]reflect.Type)
+var runSteps []utils.Step
+var deferSteps []utils.Step
 
 func initRegistry() {
 	stepRegistry["cmd"] = reflect.TypeOf(CmdStep{})
 	stepRegistry["until"] = reflect.TypeOf(UntilStep{})
+	stepRegistry["defer"] = reflect.TypeOf(DeferStep{})
 }
 
 func RunSteps(conf *utils.Conf) error {
+	var err error = nil
 	initRegistry()
+
 	for i := 0; i < len(conf.Steps); i++ {
-		err := runStep(conf.Steps[i])
-		if err != nil {
-			return err
+		if conf.Steps[i].Mode == "defer" {
+			deferSteps = append(deferSteps, conf.Steps[i])
+		} else {
+			runSteps = append(runSteps, conf.Steps[i])
 		}
 	}
-	return nil
+
+	// Run steps
+	for i := 0; i < len(runSteps); i++ {
+		err = runStep(runSteps[i])
+		if err != nil {
+			utils.LogError(" ﹂Step failed with error %s", err.Error())
+			break
+		}
+	}
+
+	// Run defer steps
+	for i := 0; i < len(deferSteps); i++ {
+		deferErr := runStep(deferSteps[i])
+		if deferErr != nil {
+			utils.LogError(" ﹂Step failed with error %s", deferErr.Error())
+		}
+	}
+
+	return err
 }
 
 func runStep(step utils.Step) error {
@@ -36,15 +61,26 @@ func runStep(step utils.Step) error {
 
 	s := reflect.New(stepRegistry[step.Mode]).Elem().Interface().(StepInterface)
 	s = s.setStep(step)
-	utils.LogInfo("Running step %s", s.name())
+	utils.LogInfo("\r\nRunning step %s", s.name())
 
 	out, err := s.run()
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("%s", out)
-	utils.LogSuccess("Finished step %s", s.name())
+	printStepOutput(out)
+	utils.LogSuccess("\r ﹂Finished step %s", s.name())
 
 	return nil
+}
+
+func printStepOutput(out []byte) {
+	var lines []string = strings.Split(string(out), "\n")
+	for index, line := range lines {
+		line = "  " + line
+		if index != len(lines)-1 {
+			line += "\n"
+		}
+		fmt.Printf("%s", line)
+	}
 }

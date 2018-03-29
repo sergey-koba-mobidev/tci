@@ -40,7 +40,7 @@ func (c UntilStep) run() ([]byte, error) {
 		}
 		out = retryOut
 		if !strings.Contains(string(out), c.step.Contains) {
-			utils.LogInfo("Waiting %d milliseconds before next retry %d", c.step.Delay, retries)
+			utils.LogInfo(" ﹂Waiting %d milliseconds before next retry %d", c.step.Delay, retries)
 			time.Sleep(time.Duration(c.step.Delay) * time.Millisecond)
 		}
 		retries++

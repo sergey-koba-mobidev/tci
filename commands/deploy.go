@@ -19,7 +19,7 @@ func Deploy(filename string) error {
 		return err
 	}
 
-	utils.LogInfo("Found %d step(s).", len(conf.Steps))
+	utils.LogSuccess(" ﹂Found %d step(s).", len(conf.Steps))
 	err = steps.RunSteps(conf)
 	if err != nil {
 		return err
