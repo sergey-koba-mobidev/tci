@@ -2,7 +2,6 @@ package steps
 
 import (
 	"strings"
-	"os/exec"
 	"github.com/sergey-koba-mobidev/tci/utils"
 	"errors"
 	"time"
@@ -27,16 +26,13 @@ func (c UntilStep) run() ([]byte, error) {
 		c.step.Delay = 100
 	}
 
-	parts := strings.Fields(c.step.Command)
-	head := parts[0]
-	parts = parts[1:len(parts)]
 	var out []byte
 	retries := 0
 
 	for !strings.Contains(string(out), c.step.Contains) && retries < c.step.Retries {
-		retryOut, err := exec.Command(head, parts...).Output()
+		retryOut, err := ExecSystemCommand(c.step.Command, c.step.Shell)
 		if err != nil {
-			return nil, err
+			return retryOut, err
 		}
 		out = retryOut
 		if !strings.Contains(string(out), c.step.Contains) {

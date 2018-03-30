@@ -64,11 +64,12 @@ func runStep(step utils.Step) error {
 	utils.LogInfo("\r\nRunning step %s", s.name())
 
 	out, err := s.run()
+	printStepOutput(out)
+
 	if err != nil {
 		return err
 	}
 
-	printStepOutput(out)
 	utils.LogSuccess("\r ﹂Finished step %s", s.name())
 
 	return nil

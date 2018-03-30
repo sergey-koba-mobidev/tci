@@ -11,6 +11,7 @@ type Step struct {
 	Contains string `yaml:"contains"`
 	Retries int `yaml:"retries"`
 	Delay int `yaml:"delay"`
+	Shell bool `yaml:"shell"`
 }
 
 type Conf struct {

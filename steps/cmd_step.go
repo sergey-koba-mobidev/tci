@@ -1,8 +1,6 @@
 package steps
 
 import (
-	"strings"
-	"os/exec"
 	"github.com/sergey-koba-mobidev/tci/utils"
 	"errors"
 )
@@ -16,16 +14,7 @@ func (c CmdStep) run() ([]byte, error) {
 		return nil, errors.New("`command` cannot be blank for step")
 	}
 
-	parts := strings.Fields(c.step.Command)
-	head := parts[0]
-	parts = parts[1:len(parts)]
-
-	out, err := exec.Command(head, parts...).Output()
-	if err != nil {
-		return nil, err
-	}
-
-	return out, nil
+	return ExecSystemCommand(c.step.Command, c.step.Shell)
 }
 
 func (c CmdStep) name() string {
